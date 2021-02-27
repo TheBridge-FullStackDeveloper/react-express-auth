@@ -7,7 +7,7 @@
 
 - Adicionalmente podemos mostrar un mensaje de error al user cuando hace un login/register no válido con [react-toastify](https://fkhadra.github.io/react-toastify/introduction/)
 
-## Ejercicio 1
+## Ejercicio 1
 
 - Separar cada ruta en un componente que se conecte al Context y gestione la información tal y como hacemos ahora.
 - Copiar la funcionalidad de `login` en una nueva funcionalidad `register` o `signup` que añada un nuevo user a nuestro servidor.
