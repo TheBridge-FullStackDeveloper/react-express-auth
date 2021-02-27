@@ -1,5 +1,7 @@
 import { useForm } from 'react-hook-form';
 import { Switch, Route, Link, Redirect } from 'react-router-dom';
+import 'react-loader-spinner/dist/loader/css/react-spinner-loader.css';
+import Loader from 'react-loader-spinner';
 
 import { UserContext } from './store';
 import useAuthentication from './hooks/useAuthentication';
@@ -13,7 +15,7 @@ import './App.css';
 //   id: null,
 // }
 function App() {
-  const { user, login } = useAuthentication();
+  const { user, login, logout, loading } = useAuthentication();
   const { handleSubmit, register } = useForm();
 
   const handleFormSubmit = (formValues) => {
@@ -35,42 +37,76 @@ function App() {
   // }, []);
 
   return (
-    <UserContext.Provider value={{ user, login }}>
+    <UserContext.Provider value={{ user, login, loading }}>
       <div className="App">
+        {user ? (
+          <header>
+            <button onClick={logout}>Logout</button>
+          </header>
+        ) : null}
+
         <Switch>
+          {/* Si estamos cargando, pintamos el loader, cuando loading sea false y ya
+          tengamos una respuesta del getProfile, vamos a pintar los Route que
+          gestionarán la ruta en la que estamos */}
+
           <Route path="/profile" exact>
-            {user ? (
-              <h1>Bienvenid@ a mi App! {user.username}</h1>
+            {loading ? (
+              <Loader
+                type="MutatingDots"
+                color="#00BFFF"
+                height={100}
+                width={100}
+                timeout={10000}
+              />
             ) : (
-              <Redirect to="/login" />
+              <>
+                {user ? (
+                  <h1>Bienvenid@ a mi App! {user.username}</h1>
+                ) : (
+                  <Redirect to="/login" />
+                )}
+              </>
             )}
           </Route>
 
           <Route path="/login" exact>
-            {user ? (
-              <Redirect to="/profile" />
+            {loading ? (
+              <Loader
+                type="MutatingDots"
+                color="#00BFFF"
+                height={100}
+                width={100}
+                timeout={10000}
+              />
             ) : (
               <>
-                <h2>Iniciar sesión!</h2>
-                <form onSubmit={handleSubmit(handleFormSubmit)}>
-                  <label htmlFor="email">Email</label>
-                  <input
-                    type="email"
-                    id="email"
-                    name="email"
-                    ref={register({ required: true })}
-                  />
-                  <br />
-                  <label htmlFor="password">Password</label>
-                  <input
-                    type="password"
-                    id="password"
-                    name="password"
-                    ref={register({ required: true })}
-                  />
-                  <br />
-                  <button type="submit">¡Enviar! 🚀</button>
-                </form>
+                {user ? (
+                  <Redirect to="/profile" />
+                ) : (
+                  <>
+                    <h2>Iniciar sesión!</h2>
+                    <form onSubmit={handleSubmit(handleFormSubmit)}>
+                      <label htmlFor="email">Email</label>
+                      <input
+                        type="email"
+                        id="email"
+                        name="email"
+                        ref={register({ required: true })}
+                      />
+                      <br />
+                      <label htmlFor="password">Password</label>
+                      <input
+                        type="password"
+                        id="password"
+                        name="password"
+                        ref={register({ required: true })}
+                      />
+                      <br />
+                      <button type="submit">¡Enviar! 🚀</button>
+                    </form>
+                  </>
+                )}
               </>
             )}
           </Route>

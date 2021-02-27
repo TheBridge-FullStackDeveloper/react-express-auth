@@ -1,13 +1,52 @@
-body {
-  margin: 0;
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
-    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
-    sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
+:root {
+  --square-side: 50px;
+  --triangle-side: 30px;
 }
 
-code {
-  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
-    monospace;
+body {
+  margin: 0;
+  padding: 0;
+}
+
+@keyframes bounce {
+  0% {
+    transform: translateX(0);
+  }
+  50% {
+    transform: translateX(calc(100vw - var(--square-side)));
+  }
+  to {
+    transform: translateX(0);
+  }
+}
+
+.bounce {
+  width: var(--square-side);
+  height: var(--square-side);
+  background-color: pink;
+  animation-name: bounce;
+  animation-duration: 4s;
+  animation-iteration-count: infinite;
+}
+
+@keyframes jump {
+  0% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(calc(100vh - calc(3 * var(--triangle-side))));
+  }
+  to {
+    transform: translateY(0);
+  }
+}
+
+.jump {
+  width: 0;
+  border: calc(0.866 * var(--triangle-side)) solid transparent;
+  border-top: 0;
+  border-bottom: var(--triangle-side) solid lime;
+  animation-name: jump;
+  animation-duration: 4s;
+  animation-iteration-count: infinite;
 }

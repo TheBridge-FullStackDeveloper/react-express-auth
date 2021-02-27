@@ -28,6 +28,9 @@ const users = [
   },
 ];
 
+// Simulamos que tenemos un req.user como hace passport...
+let user = null;
+
 // Metemos el router aquí porque es un server mock
 const router = express.Router();
 
@@ -40,7 +43,26 @@ router.post('/auth/login', (req, res, next) => {
     return user.password === password && user.email === email;
   });
 
+  // En passport sería => req.logIn()
+  if (foundUser) {
+    user = foundUser;
+  }
+
   res.status(200).json({ data: foundUser });
+});
+
+router.get('/auth/profile', (req, res, next) => {
+  // En passport devolveríamos => req.user
+  setTimeout(() => {
+    res.status(200).json({ data: user });
+  }, 1000);
+});
+
+router.get('/auth/logout', (req, res, next) => {
+  user = null;
+  // En passport sería => req.logOut();
+
+  res.status(200).json({ data: user });
 });
 
 app.use('/', router);
